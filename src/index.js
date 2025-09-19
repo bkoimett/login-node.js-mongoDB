@@ -46,14 +46,22 @@ app.post("/signup", async (req, res) => {
     password: req.body.password,
   });
 
-  auths
-    .save()
-    .then((result) => {
-      res.redirect("/login");
-    })
-    .catch((err) => {
-      console.log(err);
+  const existingUser = await auth.findOne({ name: auths.name });
+  if (existingUser) {
+    return res.render("signup", {
+      error: "User already exists. Please choose a different username.",
     });
+  }
+
+  try {
+    const result = await auths.save();
+    res.redirect("/login");
+  } catch (err) {
+    console.log(err);
+    res.render("signup", {
+      error: "Error creating user. Please try again.",
+    });
+  }
 });
 
 // Start the server
