@@ -40,6 +40,7 @@ app.get("/signup", (req, res) => {
   res.render("signup");
 });
 
+// registration route
 app.post("/signup", async (req, res) => {
   const auths = new auth({
     name: req.body.username,
@@ -51,16 +52,23 @@ app.post("/signup", async (req, res) => {
     return res.render("signup", {
       error: "User already exists. Please choose a different username.",
     });
-  }
+  } else {
 
-  try {
-    const result = await auths.save();
-    res.redirect("/login");
-  } catch (err) {
-    console.log(err);
-    res.render("signup", {
-      error: "Error creating user. Please try again.",
-    });
+    // hash passwords with bcrypt
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(auths.password, saltRounds);
+
+    auths.password = hashedPassword; // replace the hash password with original password
+
+    try {
+      const result = await auths.save();
+      res.redirect("/login");
+    } catch (err) {
+      console.log(err);
+      res.render("signup", {
+        error: "Error creating user. Please try again.",
+      });
+    }
   }
 });
 
