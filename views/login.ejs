@@ -5,16 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
     <link rel="stylesheet" href="/style.css" />
+    <style>
+      .error-message {
+        color: red;
+        text-align: center;
+        margin-top: 10px;
+        font-size: 14px;
+      }
+    </style>
   </head>
   <body>
     <div class="form-container">
       <h2>Login</h2>
       <form action="/login" method="post">
         <div class="form-group">
-          <label for="name">Name:</label>
+          <label for="username">Name:</label>
           <input
             type="text"
-            id="name"
+            id="username"
             name="username"
             placeholder="Enter your name"
             required
@@ -31,9 +39,15 @@
             required
           />
         </div>
-        <button type="submit" class="submit-btn">Submit</button>
+        <button type="submit" class="submit-btn">Login</button>
       </form>
-      <p>Don't have an account? <a href="/signup">Signup</a></p>
+
+      <!-- Error message (just like signup) -->
+      <% if (typeof error !== "undefined") { %>
+      <p class="error-message"><%= error %></p>
+      <% } %>
+
+      <p>Don't have an account? <a href="/signup">Sign up</a></p>
     </div>
   </body>
 </html>

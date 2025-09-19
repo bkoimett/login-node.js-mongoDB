@@ -74,23 +74,24 @@ app.post("/signup", async (req, res) => {
 
 // Login user 
 app.post("/login", async (req, res) => {
-    try {
-        const check = await auth.findOne({ name: req.body.username });
-        if (!check) {
-            res.send("User name cannot found")
-        }
-        // Compare the hashed password from the database with the plaintext password
-        const isPasswordMatch = await bcrypt.compare(req.body.password, check.password);
-        if (!isPasswordMatch) {
-            res.send("wrong Password");
-        }
-        else {
-            res.render("home");
-        }
+  try {
+    const check = await auth.findOne({ name: req.body.username }); // ✅ use model
+    if (!check) {
+      return res.render("login", { error: "User not found. Please sign up first." });
     }
-    catch {
-        res.send("wrong Details");
+
+    // Compare password
+    const isPasswordMatch = await bcrypt.compare(req.body.password, check.password);
+    if (!isPasswordMatch) {
+      return res.render("login", { error: "Wrong password. Please try again." });
     }
+
+    // Successful login
+    return res.render("home");
+  } catch (err) {
+    console.error(err);
+    return res.render("login", { error: "Something went wrong. Please try again." });
+  }
 });
 
 // Start the server
