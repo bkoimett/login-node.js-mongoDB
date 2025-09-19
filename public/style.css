@@ -51,15 +51,16 @@ h2 {
     display: block;
     width: 100%;
     padding: 10px;
-    background-color: #472dbb;
+    background-color: crimson;
     color: #fff;
+    text-decoration: solid;
     border: none;
     border-radius: 5px;
     cursor: pointer;
   }
 
   .submit-btn:hover {
-    background-color: #4565a0;
+    background-color: black;
   }
 
   p {
